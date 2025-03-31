@@ -1,0 +1,31 @@
+### Get the score
+# GET http://localhost:8085/futura_back/api/health-check
+# Accept: application/json
+
+
+
+# POST http://localhost:8080/api/users/login
+# Content-Type: application/json
+
+# {
+#   "username": "samysamy",
+#   "password": "password"
+# }
+
+
+
+# POST http://localhost:8080/api/users/register
+# Content-Type: application/json
+
+# {
+#   "username": "john",
+#   "email": "yeah@ahahecom",
+#   "password": "123sdeznd"
+# }
+
+
+GET http://localhost:8080/api/users/utilisators
+Content-Type: application/json
+
+
+
