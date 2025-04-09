@@ -8,6 +8,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -122,19 +123,29 @@ public class UserController {
         // Set the authentication in the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Generate a JWT token
+        //!* Generate a JWT token
         String token = jwtGenerator.generateToken(authentication);
 
+        //* generate the cookie */
         Cookie cookie = new Cookie("JWT_token", token);
         cookie.setHttpOnly(true);
         // SET FALSE IN DEVELOPMENT PHASE AND TRUE TO ONLY SEND OVER HTTPS: 
         cookie.setSecure(false); 
         cookie.setPath("/");
+        // cookie.setMaxAge(7 * 24 * 60 * 60); // 1 week expiration
+        // cookie.setDomain("localhost"); // Add this line
         response.addCookie(cookie);
 
+         //* ✅ Send token in response header
+         response.setHeader("Authorization", "Bearer " + token);
 
-        // Return the token in the response
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        //* */ Add custom headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Custom-Header-JWT", token);
+
+
+        //!** Return the token in the body response too
+        return new ResponseEntity<>(new AuthResponseDTO(token),  HttpStatus.OK);
     } catch (AuthenticationException e) {
         // Log the error and return a 401 Unauthorized response
         System.err.println("Authentication failed: " + e.getMessage());
@@ -163,6 +174,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
+        System.out.println("Logout endpoint reached at: " + new java.util.Date());
         // Clear the JWT cookie
         Cookie cookie = new Cookie("JWT_token", null);
         cookie.setHttpOnly(true);
@@ -174,9 +186,6 @@ public class UserController {
 
         return ResponseEntity.ok("Logout successful");
 }
-
-
-
 
 
 }

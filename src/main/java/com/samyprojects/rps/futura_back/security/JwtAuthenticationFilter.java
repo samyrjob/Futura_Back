@@ -8,10 +8,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -23,8 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     
     @Override
-    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request,
-            jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response, jakarta.servlet.FilterChain filterChain)
             throws jakarta.servlet.ServletException, IOException {
 
                 String token = getJWTFromRequest(request);
@@ -40,12 +40,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);  
             }
 
-            
-            private String getJWTFromRequest(jakarta.servlet.http.HttpServletRequest request) {
-                            String bearerToken = request.getHeader("Authorization");
-                if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                    return bearerToken.substring(7, bearerToken.length());
+
+            private String getJWTFromRequest(HttpServletRequest request) {
+
+                //* Check JWT THROUGH COOKIE
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if ("JWT_token".equals(cookie.getName())) {
+                            return cookie.getValue(); // Returns token from cookie
+                        }
+                    }
                 }
-                return null;
+                
+                //* Fallback to authorization HEADER : way not using cookie but normal bearer authorization header
+                String requestURI = request.getRequestURI();
+
+                if ("/api/users/logout".equals(requestURI)){
+                    String bearerToken = request.getHeader("Authorization");
+                    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                        return bearerToken.substring(7); // Returns token from header
+                    }
+                }
+                
+                return null; // No token found
             }
+
+            
+
+            //* way not using cookie but normal bearer authorization header */
+            // private String getJWTFromRequest(jakarta.servlet.http.HttpServletRequest request) {
+            //                 String bearerToken = request.getHeader("Authorization");
+            //     if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            //         return bearerToken.substring(7, bearerToken.length());
+            //     }
+            //     return null;
+            // }
 }

@@ -81,7 +81,7 @@ public class JWTGenerator {
     return Jwts.builder()
         .setSubject(username)
         .setIssuedAt(Date.from(now))
-        .setExpiration(Date.from(now.plus(1, ChronoUnit.MINUTES))) // Shorter than usual
+        .setExpiration(Date.from(now.plus(120, ChronoUnit.MINUTES))) // Shorter than usual
         .signWith(key)
         .compact();
 }
