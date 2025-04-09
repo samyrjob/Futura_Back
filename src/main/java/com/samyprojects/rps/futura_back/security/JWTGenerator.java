@@ -2,6 +2,8 @@ package com.samyprojects.rps.futura_back.security;
 
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +72,18 @@ public class JWTGenerator {
 			throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect",ex.fillInStackTrace());
 		}
 	}
+
+
+	// refresh token method : 
+
+	public String generateRefreshToken(String username) {
+    Instant now = Instant.now();
+    return Jwts.builder()
+        .setSubject(username)
+        .setIssuedAt(Date.from(now))
+        .setExpiration(Date.from(now.plus(120, ChronoUnit.MINUTES))) // Shorter than usual
+        .signWith(key)
+        .compact();
+}
 
 }

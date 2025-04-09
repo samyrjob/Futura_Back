@@ -59,7 +59,10 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll() // Allow access to H2 console
                 .requestMatchers("/api/users/register").permitAll()
                 .requestMatchers("api/users/login").permitAll()
+                .requestMatchers("api/users/logout").authenticated()
                 .requestMatchers("/api/auth/status").authenticated() // Protected endpoint to check auth status
+                // .requestMatchers("/api/users/logout").permitAll() //
+                .requestMatchers(HttpMethod.OPTIONS).permitAll() // Allow preflight
                 .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
@@ -82,6 +85,7 @@ public class SecurityConfig {
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow specific HTTP methods
     configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
     configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
+    configuration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all endpoints
