@@ -145,7 +145,7 @@ public class UserController {
 
 
         //!** Return the token in the body response too
-        return new ResponseEntity<>(new AuthResponseDTO(token),  HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDTO(token), headers, HttpStatus.OK);
     } catch (AuthenticationException e) {
         // Log the error and return a 401 Unauthorized response
         System.err.println("Authentication failed: " + e.getMessage());
@@ -184,7 +184,9 @@ public class UserController {
         cookie.setMaxAge(0); // Expire the cookie
         response.addCookie(cookie);
 
-        return ResponseEntity.ok("Logout successful");
+        // return ResponseEntity.ok("Logout successful");
+        // Return a valid JSON response
+        return ResponseEntity.ok(Map.of("message", "Logout successful"));
 }
 
 

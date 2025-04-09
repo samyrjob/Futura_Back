@@ -54,14 +54,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
                 
                 //* Fallback to authorization HEADER : way not using cookie but normal bearer authorization header
-                String requestURI = request.getRequestURI();
+                // String requestURI = request.getRequestURI();
 
-                if ("/api/users/logout".equals(requestURI)){
-                    String bearerToken = request.getHeader("Authorization");
-                    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                        return bearerToken.substring(7); // Returns token from header
-                    }
-                }
+                // if ("/api/users/logoutInactivity".equals(requestURI)){
+
+                    // String bearerToken = request.getHeader("Authorization");
+                    // if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                    //     return bearerToken.substring(7); // Returns token from header
+                    // }
+                // }
                 
                 return null; // No token found
             }
