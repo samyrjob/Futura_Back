@@ -70,7 +70,9 @@ public class AuthController {
             } else {
                 return ResponseEntity.ok(new AuthResponseStatusDTO(null, false));
             }
-        } catch (ExpiredJwtException e) {
+        } 
+        
+        catch (ExpiredJwtException e) {
             return ResponseEntity.status(401).body("Token expired");
         }  catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
