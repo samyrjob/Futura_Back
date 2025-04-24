@@ -39,7 +39,7 @@ public class AuthController {
             // Validate the token
             if (jwtUtil.validateToken(token)) {
                 // Fetch user data
-                String username = jwtUtil.getUsernameFromJWT(token);
+                String username = jwtUtil.getUserEmailFromJWT(token);
                 Optional<Utilisator> userOptional = userService.findByUsername(username);
 
                 // Return user data

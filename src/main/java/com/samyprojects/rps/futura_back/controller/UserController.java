@@ -117,7 +117,7 @@ public class UserController {
     try {
         // Authenticate the user
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
         );
 
         // Set the authentication in the SecurityContext

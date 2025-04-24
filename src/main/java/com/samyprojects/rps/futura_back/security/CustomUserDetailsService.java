@@ -32,8 +32,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Utilisator utilisator = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("this user does not exit, sorry !"));
-        return new User(utilisator.getName(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
+        // Utilisator utilisator = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("this user does not exit, sorry !"));
+        // return new User(utilisator.getName(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
+            // You can check if the username passed is actually an email.
+        return loadUserByEmail(username);  // Use email-based login
+    }
+
+    
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+
+        Utilisator utilisator = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("this email adress does not exit, sorry !"));
+        return new User(utilisator.getEmail(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
     }
 
 

@@ -9,5 +9,6 @@ import com.samyprojects.rps.futura_back.model.Role;
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     Optional<Role> findByName (String name);
+   
     
 }

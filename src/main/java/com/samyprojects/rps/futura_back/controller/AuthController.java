@@ -56,7 +56,7 @@ public class AuthController {
             // Validate the token
             if (jwtUtil.validateToken(token)) {
                 // Fetch user data
-                String username = jwtUtil.getUsernameFromJWT(token);
+                String username = jwtUtil.getUserEmailFromJWT(token);
                 Optional<Utilisator> userOptional = userService.findByUsername(username);
 
                 // Return user data
@@ -70,7 +70,9 @@ public class AuthController {
             } else {
                 return ResponseEntity.ok(new AuthResponseStatusDTO(null, false));
             }
-        } catch (ExpiredJwtException e) {
+        } 
+        
+        catch (ExpiredJwtException e) {
             return ResponseEntity.status(401).body("Token expired");
         }  catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
