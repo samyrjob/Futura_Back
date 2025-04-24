@@ -36,6 +36,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User(utilisator.getName(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
     }
 
+    
+    // public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+
+    //     Utilisator utilisator = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("this email adress does not exit, sorry !"));
+    //     return new User(utilisator.getEmail(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
+    // }
+
 
     private Collection<GrantedAuthority>mapRolesToAuthorities(List<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());

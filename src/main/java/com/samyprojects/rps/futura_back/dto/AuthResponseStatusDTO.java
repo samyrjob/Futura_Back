@@ -11,6 +11,7 @@ public class AuthResponseStatusDTO {
     private boolean authenticated;
 
     
+
     public AuthResponseStatusDTO(Utilisator user, boolean authenticated) {
         this.user = user;
         this.authenticated = authenticated;
