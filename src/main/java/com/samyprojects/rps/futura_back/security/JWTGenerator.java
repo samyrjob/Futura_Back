@@ -38,12 +38,12 @@ public class JWTGenerator {
     // private static final Key key = jwtConfig.getSigningKey();
 	
 	public String generateToken(Authentication authentication) {
-		String username = authentication.getName();
+		String userEmail = authentication.getName();
 		Date currentDate = new Date();
 		Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 		
 		String token = Jwts.builder()
-				.setSubject(username)
+				.setSubject(userEmail)
 				.setIssuedAt( new Date())
 				.setExpiration(expireDate)
 				.signWith(key,SignatureAlgorithm.HS512)
@@ -52,7 +52,8 @@ public class JWTGenerator {
 		System.out.println(token);
 		return token;
 	}
-	public String getUsernameFromJWT(String token){
+
+	public String getUserEmailFromJWT(String token){
 		Claims claims = Jwts.parserBuilder()
 				.setSigningKey(key)
 				.build()
@@ -76,10 +77,10 @@ public class JWTGenerator {
 
 	// refresh token method : 
 
-	public String generateRefreshToken(String username) {
+	public String generateRefreshToken(String userEmail) {
     Instant now = Instant.now();
     return Jwts.builder()
-        .setSubject(username)
+        .setSubject(userEmail)
         .setIssuedAt(Date.from(now))
         .setExpiration(Date.from(now.plus(120, ChronoUnit.MINUTES))) // Shorter than usual
         .signWith(key)
