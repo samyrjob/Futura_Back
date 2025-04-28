@@ -7,19 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samyprojects.rps.futura_back.model.Utilisator;
-import com.samyprojects.rps.futura_back.repository.UserRepository;
+import com.samyprojects.rps.futura_back.repository.UtilisatorRepository;
 
 @Service
 public class UtilisatorService {
 
     @Autowired
-    private UserRepository utilisatorRepository;
+    private UtilisatorRepository utilisatorRepository;
 
     public Utilisator saveUser(Utilisator utilisator) {
         return utilisatorRepository.save(utilisator);
     }
-
-
 
     public List<Utilisator> getAllUsers() {
         return utilisatorRepository.findAll();
@@ -35,6 +33,11 @@ public class UtilisatorService {
 
     public Optional<Utilisator> findByUsername(String username){
         return utilisatorRepository.findByUsername(username);
+    }
+
+    
+    public Optional<Utilisator> findByEmail(String userEmail){
+        return utilisatorRepository.findByEmail(userEmail);
     }
 
 

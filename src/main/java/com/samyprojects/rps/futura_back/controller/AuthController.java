@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.samyprojects.rps.futura_back.model.Utilisator;
 
 import com.samyprojects.rps.futura_back.dto.AuthResponseStatusDTO;
+import com.samyprojects.rps.futura_back.dto.UtilisatorDTO;
 import com.samyprojects.rps.futura_back.security.JWTGenerator;
 import com.samyprojects.rps.futura_back.service.UtilisatorService;
 
@@ -56,17 +57,25 @@ public class AuthController {
             // Validate the token
             if (jwtUtil.validateToken(token)) {
                 // Fetch user data
-                String username = jwtUtil.getUserEmailFromJWT(token);
-                Optional<Utilisator> userOptional = userService.findByUsername(username);
+                String userEmail = jwtUtil.getUserEmailFromJWT(token);
+                Optional<Utilisator> userOptional = userService.findByEmail(userEmail);
 
-                // Return user data
                 if (userOptional.isPresent()){
                     Utilisator user = userOptional.get();
-                    return ResponseEntity.ok(new AuthResponseStatusDTO(user, true));
+                        
+                //* voir après */
+                // Optional<UtilisatorDTO> userDTO = userOptional
+                //                 .map(UtilisatorDTO::new); // Convert Utilisator to UtilisatorDTO
+
+                    UtilisatorDTO userDTO = new UtilisatorDTO(user); // Convert Utilisator to UtilisatorDTO
+                    return ResponseEntity.ok(new AuthResponseStatusDTO(userDTO, true));
                 }
                 else {
                     return ResponseEntity.ok(new AuthResponseStatusDTO(null, false));
                 }
+
+                        
+             
             } else {
                 return ResponseEntity.ok(new AuthResponseStatusDTO(null, false));
             }

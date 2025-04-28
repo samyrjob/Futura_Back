@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import com.samyprojects.rps.futura_back.dto.AuthResponseDTO;
 import com.samyprojects.rps.futura_back.dto.LoginDTO;
 import com.samyprojects.rps.futura_back.dto.RegisterDto;
+import com.samyprojects.rps.futura_back.dto.UtilisatorDTO;
 import com.samyprojects.rps.futura_back.model.Role;
 import com.samyprojects.rps.futura_back.model.Utilisator;
 import com.samyprojects.rps.futura_back.repository.RoleRepository;
+import com.samyprojects.rps.futura_back.security.CustomUserDetails;
 import com.samyprojects.rps.futura_back.security.JWTGenerator;
 import com.samyprojects.rps.futura_back.service.UtilisatorService;
 
@@ -125,7 +127,9 @@ public class UserController {
 
         //!* Generate a JWT token
         String token = jwtGenerator.generateToken(authentication);
-
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Utilisator user = userDetails.getUtilisator();
+        UtilisatorDTO userDTO = new UtilisatorDTO(user);
         //* generate the cookie */
         Cookie cookie = new Cookie("JWT_token", token);
         cookie.setHttpOnly(true);
@@ -145,7 +149,7 @@ public class UserController {
 
 
         //!** Return the token in the body response too
-        return new ResponseEntity<>(new AuthResponseDTO(token), headers, HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDTO(token,userDTO), headers, HttpStatus.OK);
     } catch (AuthenticationException e) {
         // Log the error and return a 401 Unauthorized response
         System.err.println("Authentication failed: " + e.getMessage());

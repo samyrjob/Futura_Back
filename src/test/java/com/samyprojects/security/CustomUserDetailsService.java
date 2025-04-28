@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 
 import com.samyprojects.rps.futura_back.model.Role;
 import com.samyprojects.rps.futura_back.model.Utilisator;
-import com.samyprojects.rps.futura_back.repository.UserRepository;
+import com.samyprojects.rps.futura_back.repository.UtilisatorRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 
-    public UserRepository userRepository;
+    public UtilisatorRepository userRepository;
 
     @Autowired
-    CustomUserDetailsService(UserRepository userRepository){
+    CustomUserDetailsService(UtilisatorRepository userRepository){
         this.userRepository = userRepository;
     }
 

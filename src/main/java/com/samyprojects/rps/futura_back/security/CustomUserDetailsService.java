@@ -15,34 +15,38 @@ import org.springframework.stereotype.Service;
 
 import com.samyprojects.rps.futura_back.model.Role;
 import com.samyprojects.rps.futura_back.model.Utilisator;
-import com.samyprojects.rps.futura_back.repository.UserRepository;
+import com.samyprojects.rps.futura_back.service.UtilisatorService;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 
-    public UserRepository userRepository;
+    
+    public UtilisatorService utilisatorService;
 
     @Autowired
-    CustomUserDetailsService(UserRepository userRepository){
-        this.userRepository = userRepository;
+    CustomUserDetailsService(UtilisatorService utilisatorService) {
+        this.utilisatorService = utilisatorService;
     }
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        // Utilisator utilisator = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("this user does not exit, sorry !"));
-        // return new User(utilisator.getName(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
-            // You can check if the username passed is actually an email.
-        return loadUserByEmail(username);  // Use email-based login
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return loadUserByEmail(email);  // Use email-based login
     }
 
     
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+    // public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
 
-        Utilisator utilisator = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("this email adress does not exit, sorry !"));
-        return new User(utilisator.getEmail(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
+    //     Utilisator utilisator = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("this email adress does not exit, sorry !"));
+    //     return new User(utilisator.getEmail(), utilisator.getPassword(), mapRolesToAuthorities(utilisator.getRoles()));
+    // }
+
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        Utilisator utilisator = utilisatorService.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("This email address does not exist, sorry!"));
+    
+        return new CustomUserDetails(utilisator);
     }
 
 

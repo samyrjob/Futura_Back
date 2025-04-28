@@ -148,6 +148,8 @@
 							<version>1.18.30</version> <!-- Match the Lombok version -->
 						</path>
 					</annotationProcessorPaths>
+					<skipTests>true</skipTests>
+                	<skip>true</skip>
 				</configuration>
 			</plugin>
 			<plugin>

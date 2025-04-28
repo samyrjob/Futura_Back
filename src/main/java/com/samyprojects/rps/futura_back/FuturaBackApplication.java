@@ -11,7 +11,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import com.samyprojects.rps.futura_back.model.Message;
 import com.samyprojects.rps.futura_back.model.Utilisator;
 import com.samyprojects.rps.futura_back.repository.MessageRepository;
-import com.samyprojects.rps.futura_back.repository.UserRepository;
+import com.samyprojects.rps.futura_back.repository.UtilisatorRepository;
 import com.samyprojects.rps.futura_back.service.MessageService;
 import com.samyprojects.rps.futura_back.service.UtilisatorService;
 
